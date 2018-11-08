@@ -22,6 +22,7 @@
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
     "nodemon": "^1.18.4",
-    "typeorm": "^0.2.8"
+    "typeorm": "^0.2.8",
+    "typeorm-model-generator": "^0.2.22"
   }
 }
