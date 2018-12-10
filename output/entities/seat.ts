@@ -17,9 +17,9 @@ export class seat {
     @Column("varchar",{ 
         nullable:false,
         unique: true,
-        length:11,
+        length:45,
         name:"seat_number"
         })
-    seat_number:number;
+    seat_number:string;
         
 }

@@ -1,25 +1,25 @@
 import {Index,Entity, PrimaryColumn, Column, OneToOne, OneToMany, ManyToOne, ManyToMany, JoinColumn, JoinTable, RelationId} from "typeorm";
 
 
-@Entity("seat",{schema:"car_rental"})
-@Index("seat_number_UNIQUE",["seat_number",],{unique:true})
-export class seat {
+@Entity("design",{schema:"car_rental"})
+@Index("design_name_UNIQUE",["design_name",],{unique:true})
+export class design {
 
     @Column("int",{ 
         generated:true,
         nullable:false,
         primary:true,
-        name:"seat_id"
+        name:"design_id"
         })
-    seat_id:number;
+    design_id:number;
         
 
     @Column("varchar",{ 
         nullable:false,
         unique: true,
-        length:11,
-        name:"seat_number"
+        length:128,
+        name:"design_name"
         })
-    seat_number:number;
+    design_name:string;
         
 }
