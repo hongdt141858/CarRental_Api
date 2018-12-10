@@ -5,26 +5,18 @@ import { createConnections } from 'typeorm'
 import * as expressValidator from "express-validator";
 import * as dotenv from 'dotenv';
 
-
 createConnections().catch((e) => console.log(e)).then((e) => {
-
     const app = express();
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: true }));
-
     dotenv.config({ path: '.env' });
     app.set("port", process.env.PORT || 3000);
-
-    console.log("ENV: ", app.get('env'))
 
     let engine = require('ejs-locals');
     app.engine('ejs', engine);
     app.set('view engine', 'ejs');
     app.set('views', __dirname + '/views');
-
     app.use(expressValidator());
-
-    // const userRoute = require('./routers/user/UserAccountRouter')
 
     app.use(function (req, res, next) {
         res.setHeader('Access-Control-Allow-Origin', '*');
