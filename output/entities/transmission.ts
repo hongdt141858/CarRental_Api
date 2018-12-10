@@ -17,17 +17,9 @@ export class transmission {
     @Column("varchar",{ 
         nullable:false,
         unique: true,
-        length:255,
+        length:128,
         name:"transmission_name"
         })
     transmission_name:string;
-
-    @Column("varchar",{ 
-        nullable:false,
-        unique: true,
-        length:255,
-        name:"transmission_slug"
-        })
-    transmission_slug:string;
         
 }
