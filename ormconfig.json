@@ -1,6 +1,6 @@
 [
   {
-    "name": "default",
+    "name": "car_rental",
     "type": "mysql",
     "host": "localhost",
     "port": 3306,
@@ -9,7 +9,7 @@
     "database": "car_rental",
     "synchronize": false,
     "entities": [
-      "app/entities/*.js"
+      "app/entities/*.ts"
     ]
   }
 ]
