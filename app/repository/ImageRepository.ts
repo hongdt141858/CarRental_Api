@@ -22,6 +22,10 @@ export default class ImageRepository implements IImageRepository {
         return await this.imageRepo.save(image);
     }
 
+    public async createList(list: Image[]): Promise<any> {
+        return await this.imageRepo.save(list);
+    }
+
     public async delete(id: number): Promise<Image> {
         let image = await this.getOne(id);
         await this.imageRepo.delete(id);
@@ -41,6 +45,10 @@ export default class ImageRepository implements IImageRepository {
     public async findByOption(option: any): Promise<any> {
         let image = await this.imageRepo.find(option)
         return image;   
+    }
+    public async findByImageTable(tableName: string, vehicleId: number): Promise<Image[]> {
+        return this.imageRepo.find({ "vehicle_id": vehicleId, "table_name": tableName })
+        
     }
    
 }

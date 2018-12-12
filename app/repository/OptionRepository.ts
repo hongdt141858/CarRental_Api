@@ -40,4 +40,8 @@ export default class OptionRepository  implements IOptionRepository {
         return await this.optionRepo.findOne({ "option_name": name })
     }
 
+    public async findIds(ids: number[]):Promise<Option[]>{
+        return this.optionRepo.find({"option_id": In(ids)})
+    }
+
 }
