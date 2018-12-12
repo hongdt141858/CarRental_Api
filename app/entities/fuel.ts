@@ -22,4 +22,11 @@ export class fuel {
         })
     fuel_name:string;
         
+    @Column("varchar",{ 
+        nullable:false,
+        unique: true,
+        length:128,
+        name:"fuel_slug"
+        })
+    fuel_slug:string;
 }
