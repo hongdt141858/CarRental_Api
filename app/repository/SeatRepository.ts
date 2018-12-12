@@ -33,7 +33,10 @@ export default class SeatRepo implements ISeatRepository {
     }
 
     public async findByName(num: number): Promise<Seat> {
-        return await this.seatRepo.findOne({ "seat_number": num })
+        var result = await this.seatRepo.findOne({ "seat_number": num })
+        if(!result)
+        console.log(num, "????????????????????????")
+        return result
     }
  
 }

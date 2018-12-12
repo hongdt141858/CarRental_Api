@@ -10,5 +10,5 @@ export default interface IVehicleRepository{
     findByVehicleName(name: string): Promise<Vehicle>
     findByVehicleOption(option: any): Promise<any>
     findIn(arr: string[]): Promise<any>
-    findByName(vehicle_slug: string): Promise<Vehicle>
+    findByName(brand_name: string,model_name: string,vehicle_name: string): Promise<Vehicle>
 }
