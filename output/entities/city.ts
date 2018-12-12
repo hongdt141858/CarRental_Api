@@ -24,14 +24,6 @@ export class city {
     city_name:string;
         
 
-    @Column("varchar",{ 
-        nullable:true,
-        length:45,
-        name:"city_code"
-        })
-    city_code:string | null;
-        
-
    
     @OneToMany(type=>partner, partner=>partner.city_,{ onDelete: 'RESTRICT' })
     partners:partner[];

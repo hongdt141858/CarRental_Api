@@ -2,7 +2,7 @@ import {Index,Entity, PrimaryColumn, Column, OneToOne, OneToMany, ManyToOne, Man
 
 
 @Entity("procedure",{schema:"car_rental"})
-@Index("procedure_name_UNIQUE",["procedure_name",],{unique:true})
+@Index("produce_name_UNIQUE",["procedure_name",],{unique:true})
 export class procedure {
 
     @Column("int",{ 
@@ -29,5 +29,13 @@ export class procedure {
         name:"procedure_icon"
         })
     procedure_icon:string | null;
+        
+
+    @Column("varchar",{ 
+        nullable:true,
+        length:255,
+        name:"procedure_slug"
+        })
+    procedure_slug:string | null;
         
 }

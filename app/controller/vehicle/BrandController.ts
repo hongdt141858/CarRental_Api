@@ -1,7 +1,8 @@
-import { brand as Brand } from "../../entities/brand";
+ import { brand as Brand } from "../../entities/brand";
 import { Request, Response, NextFunction } from "express";
 import BrandRepository from "../../repository/BrandRepository";
 import IBrandRepository from "../../repository/irepository/IBrandRepository";
+import { MyUtil } from "../../util/MyUtil";
 
 export default class BrandController {
     private brandRepo: IBrandRepository;
