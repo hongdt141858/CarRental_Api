@@ -7,4 +7,5 @@ export default interface IImageRepository {
     delete(id: number): Promise<any>
     update(id: number, image: ImageVehicle): Promise<any> 
     findByName(name: string): Promise<ImageVehicle>
+    findByOption(option: any): Promise<any>
 }

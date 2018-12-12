@@ -29,5 +29,12 @@ export class procedure {
         name:"procedure_icon"
         })
     procedure_icon:string | null;
-        
+
+    @Column("varchar",{ 
+        nullable:true,
+        length:255,
+        name:"procedure_slug"
+        })
+    procedure_slug:string | null;
 }
+

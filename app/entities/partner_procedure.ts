@@ -1,23 +1,23 @@
 import {Index,Entity, PrimaryColumn, Column, OneToOne, OneToMany, ManyToOne, ManyToMany, JoinColumn, JoinTable, RelationId} from "typeorm";
 
 
-@Entity("partner_produce",{schema:"car_rental"})
-export class partner_produce {
+@Entity("partner_procedure",{schema:"car_rental"})
+export class partner_procedure {
 
     @Column("int",{ 
         generated:true,
         nullable:false,
         primary:true,
-        name:"partner_produce_id"
+        name:"partner_procedure_id"
         })
-    partner_produce_id:number;
+    partner_procedure_id:number;
         
 
     @Column("int",{ 
         nullable:false,
-        name:"produce_id"
+        name:"procedure_id"
         })
-    produce_id:number;
+    procedure_id:number;
         
 
     @Column("int",{ 
@@ -30,8 +30,8 @@ export class partner_produce {
     @Column("varchar",{ 
         nullable:true,
         length:255,
-        name:"produce_description"
+        name:"procedure_description"
         })
-    produce_description:string | null;
+    procedure_description:string | null;
         
 }

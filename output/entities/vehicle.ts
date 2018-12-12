@@ -16,9 +16,9 @@ export class vehicle {
     @Column("varchar",{ 
         nullable:false,
         length:255,
-        name:"version"
+        name:"vehicle_name"
         })
-    version:string;
+    vehicle_name:string;
         
 
     @Column("int",{ 
