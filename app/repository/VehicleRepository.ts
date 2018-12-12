@@ -19,7 +19,7 @@ export default class VehicleRepository  implements IVehicleRepository {
 
     public async create(vehicle: Vehicle): Promise<Vehicle> {
         await this.vehicleRepo.save(vehicle);
-        return await this.findByName(vehicle["vehicle_name"]);
+        return await this.findByName(vehicle["brand_name"], vehicle["model_name"],vehicle["vehicle_name"]);
     }
 
     public async delete(id: number): Promise<Vehicle> {
@@ -48,8 +48,8 @@ export default class VehicleRepository  implements IVehicleRepository {
         return  await this.vehicleRepo.findOne({"brand_name":brand_name,"model_name": model_name, "vehicle_name": vehicle_name})
     }
 
-    public async  findByName(name):Promise <Vehicle>{
-        return  await this.vehicleRepo.findOne({"vehicle_name":name})
+    public async  findByName(brand_name, model_name, vehicle_name):Promise <Vehicle>{
+        return  await this.vehicleRepo.findOne({"brand_name":brand_name,"model_name": model_name, "vehicle_name": vehicle_name})
     }
 
 

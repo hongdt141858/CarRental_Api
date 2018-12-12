@@ -68,7 +68,7 @@ export default class VehicleController {
         console.log(req.url)
         let checkVehicle, checkOptions = [];
         checkOptions[0] = true
-        let vehicle: Vehicle = new Vehicle(), OptionVehicles: Array<OptionVehicle> = new Array<OptionVehicle>();
+        let vehicle: Vehicle = new Vehicle(), optionVehicles: Array<OptionVehicle> = new Array<OptionVehicle>();
         let check = await this.convertDataVehicle(req, res);
 
         if (!check) {
@@ -82,7 +82,7 @@ export default class VehicleController {
 
         let result;
 
-        checkVehicle = await this.vehicleRepository.findByName(vehicle.vehicle_name).catch(err => MyUtil.handleError(err, res))
+        checkVehicle = await this.vehicleRepository.findByName(vehicle.brand_name, vehicle.model_name,vehicle.vehicle_name).catch(err => MyUtil.handleError(err, res))
 
         if (checkVehicle) {
             checkVehicle = false
@@ -92,23 +92,24 @@ export default class VehicleController {
         }
         else {
             if (vehicle_options !== undefined && vehicle_options.trim().toString() != null) {
-                checkOptions = await this.getOptionsFromVehicle(vehicle_options, res, OptionVehicles);
+                checkOptions = await this.getOptionsFromVehicle(vehicle_options, res, optionVehicles);
             }
 
             if (checkOptions[0]) {
                 result = await this.vehicleRepository.create(vehicle).catch(err => MyUtil.handleError(err, res))
 
                 let vehicle_id = result ? result.vehicle_id : 0;
-                OptionVehicles = checkOptions[1] ? checkOptions[1] : []
-                OptionVehicles.map(function (optVehicle) {
+                optionVehicles = checkOptions[1] ? checkOptions[1] : []
+                optionVehicles.map(function (optVehicle) {
                     optVehicle.vehicle_id = vehicle_id;
                     return optVehicle;
                 })
 
                 if (result) {
                     if (vehicle_options != undefined && vehicle_options.trim() != "") {
-                        for (let i = 0; i < OptionVehicles.length; i++)
-                            await this.optVehicleRepository.create(OptionVehicles[i]).catch(err => MyUtil.handleError(err, res));
+                        // console.log(optionVehicles)
+                        for (let i = 0; i < optionVehicles.length; i++)
+                            await this.optVehicleRepository.create(optionVehicles[i]).catch(err => MyUtil.handleError(err, res));
                     }
 
                     if (vehicle_images != undefined && vehicle_images.trim() != "") {
@@ -138,17 +139,19 @@ export default class VehicleController {
         let vehicle: Vehicle = new Vehicle();
 
         let data = req.body;
+        
         if (!(data && data["vehicle_name"] && data["brand_name"] && data["model_name"]
             && data["fuel_name"] && data["seat_number"]) && data["transmission_name"] && data["design_name"]) {
-            MyUtil.handleError({ message: "data is not true" }, res)
+                console.log(data)
+                MyUtil.handleError({ message: "data is not true" }, res)
             return false
         }
 
         let vehicle_images = req.body.vehicle_images, vehicle_options = req.body.vehicle_options;
         let engin_number = req.body.engin_number;
 
-
-        checkBrand = await HandleCheck.checkOptionVehicle(this.brandRepository, { "brand_name": data["brand_name"] })
+        // console.log(data)
+        checkBrand = await HandleCheck.checkOptionVehicle(this.brandRepository,data["brand_name"])
         checkDesign = await HandleCheck.checkOptionVehicle(this.designRepository, data["design_name"])
         checkFuel = await HandleCheck.checkOption(this.fuelRepository, MyUtil.slug(data["fuel_name"]))
         checkModel = await HandleCheck.checkOptionVehicle(this.modelRepository, data["model_name"])

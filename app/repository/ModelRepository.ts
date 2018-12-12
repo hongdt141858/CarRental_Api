@@ -34,7 +34,9 @@ export default class ModelRepository implements IModelRepository {
     }
 
     public async findByName(model_name: string): Promise<Model> {
+        console.log(model_name)
         let model = await this.modelRepo.findOne({ "model_name": model_name })
+        console.log(model, "//////////")
         return model;
     }
 
