@@ -51,6 +51,22 @@ export default class AppController {
 
     }
 
+    // public uploadPartner = async (req: Request, res: Response, next: NextFunction) => {
+    //     if (!req.file.path) {
+    //         var err = { message: "Open File Error" }
+    //         res.send((err) => MyUtil.handleError(err, res))
+    //     } else {
+    //         var arr = await MyUtil.readFileExcell(req.file.path + "", 1);
+    //         let partners = MyUtil.convertPartner(arr)
+    //         for (let i = 0; i < partners.length; i++) {     
+    //             req.body = partners[i]
+    //             await this.partnerController.postPartner(req, res);
+    //         }
+    //         MyUtil.handleSuccess({}, res);
+
+    //     }
+    // }
+
     // public uploadMoto = async (req: Request, res: Response, next: NextFunction) => {
     //     if (!req.file.path) {
     //         var err = { message: "Open File Error" }

@@ -27,7 +27,16 @@ createConnections().catch((e) => console.log(e)).then((e) => {
     });
 
     const cityRoute = require('./router/CityRouter')
+    const brandRoute = require('./router/BrandRouter')
+    const seatRoute = require('./router/SeatRouter')
+    const transmission = require('./router/TransmissionRouter')
+    const fuelRoute = require('./router/FuelRouter')
+
     app.use("/city", cityRoute )
+    app.use("/brand", brandRoute )
+    app.use("/seat", seatRoute )
+    app.use("/transmission", transmission )
+    app.use("/fuel", fuelRoute )
 
     app.listen(app.get("port"), () => {
         console.log(("  App is running at http://localhost:%d in %s mode"), app.get("port"), app.get("env"));
