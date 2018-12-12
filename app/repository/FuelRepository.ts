@@ -38,5 +38,10 @@ export default class FuelRepository implements IFuelRepository {
         return fuel;
     }
 
+    public async findBySlug(fuel_slug: string): Promise<Fuel> {
+        let fuel = await this.fuelRepo.findOne({ "fuel_slug": fuel_slug })
+        return fuel;
+    }
+
    
 }

@@ -1,13 +1,13 @@
-// var Excel = require('exceljs');
-// const  slug = require('slug')
+var Excel = require('exceljs');
+const  slug = require('slug')
 
 // var jwt = require('jsonwebtoken');
 // var config = require('../config/token');
 
 export const MyUtil = {
-    // slug: (str) => {
-    //     return slug(str.toLowerCase())
-    // },
+    slug: (str) => {
+        return slug(str.toLowerCase())
+    },
     handleError: (error, res) => {
         res.send({ code: "error", message: error.message })
         res.end();

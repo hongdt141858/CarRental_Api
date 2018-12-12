@@ -42,6 +42,12 @@ export class vehicle {
         })
     model_id:number | null;
         
+    @Column("float",{ 
+        nullable:true,
+        precision:12,
+        name:"engin_number"
+        })
+        engin_number:number | null;
 
     @Column("varchar",{ 
         nullable:true,
