@@ -41,6 +41,7 @@ export default class VehicleRepository  implements IVehicleRepository {
         if(option["seat_id"] && Array.isArray(option["seat_id"])){
             option = Object.assign(option, {"seat_id": In( option["seat_id"])})
         }
+        console.log(option)
         return await this.vehicleRepo.find(option)
     }
 
