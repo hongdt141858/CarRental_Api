@@ -1,8 +1,10 @@
 var Excel = require('exceljs');
 const  slug = require('slug')
+import * as bcrypt from "bcrypt";
+import { user_account } from "../../output/entities/user_account";
 
-// var jwt = require('jsonwebtoken');
-// var config = require('../config/token');
+var jwt = require('jsonwebtoken');
+var config = require('../config/token');
 
 export const MyUtil = {
     slug: (str) => {
@@ -144,103 +146,104 @@ export const MyUtil = {
         if (num > -100 && num < 100) return true;
         else return false
     },
-    // getDays: (rentalDate: Date, returnDate: Date) => {
-    //     let rtl = new Date(rentalDate.getTime());
-    //     let rtn = new Date(returnDate.getTime());
-    //     var daysOfYear = new Array<Date>();
-    //     if (rtl && rtn) {
-    //         for (let d = rtl; d <= rtn; d.setDate(d.getDate() + 1)) {
-    //             daysOfYear.push(new Date(d));
-    //         }
-    //     }
-    //     return daysOfYear
-    // },
-    // getWdays: (rentalDate: Date, returnDate: Date, partner) => {
-    //     var arr_days = MyUtil.getDays(rentalDate, returnDate);
-    //     var partWday = partner.part_wdays;
-    //     var wdays = [];
-    //     if (arr_days.length > 0 && partWday && partWday.length > 0) {
-    //         for (let i = 0; i < arr_days.length; i++) {
-    //             for (let j = 0; j < partWday.length; j++) {
-    //                 if (arr_days[i].getDay() === partWday[j].wday.wday_indx) wdays.push(arr_days[i]);
-    //             }
-    //         }
-    //     }
-    //     return wdays;
-    // },
-    // getHolis: (rentalDate: Date, returnDate: Date, partner) => {
-    //     var arr_days = MyUtil.getDays(rentalDate, returnDate);
-    //     var partHoli = partner.part_holis;
-    //     var holis = [];
+    getDays: (rentalDate: Date, returnDate: Date) => {
+        let rtl = new Date(rentalDate.getTime());
+        let rtn = new Date(returnDate.getTime());
+        var daysOfYear = new Array<Date>();
+        if (rtl && rtn) {
+            for (let d = rtl; d <= rtn; d.setDate(d.getDate() + 1)) {
+                daysOfYear.push(new Date(d));
+            }
+        }
+        return daysOfYear
+    },
+    getWdays: (rentalDate: Date, returnDate: Date, partner) => {
+        var arr_days = MyUtil.getDays(rentalDate, returnDate);
+        var partWday = partner.part_wdays;
+        var wdays = [];
+        if (arr_days.length > 0 && partWday && partWday.length > 0) {
+            for (let i = 0; i < arr_days.length; i++) {
+                for (let j = 0; j < partWday.length; j++) {
+                    if (arr_days[i].getDay() === partWday[j].wday.wday_indx) wdays.push(arr_days[i]);
+                }
+            }
+        }
+        return wdays;
+    },
+    getHolis: (rentalDate: Date, returnDate: Date, partner) => {
+        var arr_days = MyUtil.getDays(rentalDate, returnDate);
+        var partHoli = partner.part_holis;
+        var holis = [];
 
-    //     if (arr_days.length > 0 && partHoli && partHoli.length > 0) {
-    //         arr_days.map(d => {
-    //             var date = d.getDate();
-    //             var month = d.getMonth();
-    //             for (let i = 0; i < partHoli.length; i++) {
-    //                 var holiFrom = partHoli[i].holi.holi_day_from;
-    //                 var holiTo = partHoli[i].holi.holi_day_to;
-    //                 if (holiFrom && holiTo) {
-    //                     var dateFrom = new Date(holiFrom);
-    //                     var dateTo = new Date(holiTo);
-    //                     for (var day = dateFrom; day <= dateTo; day.setDate(day.getDate() + 1)) {
-    //                         if ((day.getDate() === date) && (day.getMonth() === month)) holis.push(d);
-    //                     }
-    //                 }
-    //             }
-    //         })
-    //     }
-    //     return holis
-    // },
-    // getDayNumHoliIsWday: (wdays, holis) => { // so ngay holi la ngay cuoi tuan
-    //     var dayNum = 0;
-    //     if (wdays.length > 0 && holis.length > 0) {
-    //         for (let i = 0; i < holis.length; i++) {
-    //             for (let j = 0; j < wdays.length; j++) {
-    //                 if (wdays[j].getTime() === holis[i].getTime()) dayNum++;
-    //             }
-    //         }
-    //     }
-    //     return dayNum;
-    // },
-    // getExtaHourNum: (): number => {
-    //     return 0
-    // },
-    // getRandomInt: function (min, max) {
-    //     return Math.floor(Math.random() * (max - min + 1)) + min;
-    // },
-    // getToken: (user: cx_user_acc) => {
-    //     if (!user) {
-    //         console.log("User is not existed!")
-    //         return null;
-    //     }
-    //     var token = jwt.sign({ id: user.user_acc_id }, config.secret, {
-    //         expiresIn: config.expires // expires in 24 hours
-    //     });
-    //     return token;
-    // },
-    // getUserIdByToken: (token: string) => {
-    //     var user_acc_id = 0;
-    //     if (token) {
-    //         jwt.verify(token, config.secret, function (err, decoded) {
-    //             if (err) {
-    //                 console.log(err.message)
-    //             }
-    //             else {
-    //                 console.log(decoded)
-    //                 user_acc_id = decoded.id
-    //             }
-    //         });
-    //     }
-    //     return user_acc_id;
-    // },
-    // getHashPass: (pass: string) => {
-    //     const salt = bcrypt.genSaltSync(10);
-    //     const hash = bcrypt.hashSync(pass, salt)
-    //     return hash
-    // },
-    // checkPass: (newPass: string, pass: string) => {
-    //     var res = bcrypt.compareSync(newPass, pass) 
-    //     return res;
-    // }
+        if (arr_days.length > 0 && partHoli && partHoli.length > 0) {
+            arr_days.map(d => {
+                var date = d.getDate();
+                var month = d.getMonth();
+                for (let i = 0; i < partHoli.length; i++) {
+                    var holiFrom = partHoli[i].holi.holi_day_from;
+                    var holiTo = partHoli[i].holi.holi_day_to;
+                    if (holiFrom && holiTo) {
+                        var dateFrom = new Date(holiFrom);
+                        var dateTo = new Date(holiTo);
+                        for (var day = dateFrom; day <= dateTo; day.setDate(day.getDate() + 1)) {
+                            if ((day.getDate() === date) && (day.getMonth() === month)) holis.push(d);
+                        }
+                    }
+                }
+            })
+        }
+        return holis
+    },
+    getDayNumHoliIsWday: (wdays, holis) => { // so ngay holi la ngay cuoi tuan
+        var dayNum = 0;
+        if (wdays.length > 0 && holis.length > 0) {
+            for (let i = 0; i < holis.length; i++) {
+                for (let j = 0; j < wdays.length; j++) {
+                    if (wdays[j].getTime() === holis[i].getTime()) dayNum++;
+                }
+            }
+        }
+        return dayNum;
+    },
+    getExtaHourNum: (): number => {
+        return 0
+    },
+    getRandomInt: function (min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    },
+
+    getToken: (user: user_account) => {
+        if (!user) {
+            console.log("User is not existed!")
+            return null;
+        }
+        var token = jwt.sign({ id: user.user_account_id }, config.secret, {
+            expiresIn: config.expires // expires in 24 hours
+        });
+        return token;
+    },
+    getUserIdByToken: (token: string) => {
+        var user_account_id = 0;
+        if (token) {
+            jwt.verify(token, config.secret, function (err, decoded) {
+                if (err) {
+                    console.log(err.message)
+                }
+                else {
+                    console.log(decoded)
+                    user_account_id = decoded.id
+                }
+            });
+        }
+        return user_account_id;
+    },
+    getHashPass: (pass: string) => {
+        const salt = bcrypt.genSaltSync(10);
+        const hash = bcrypt.hashSync(pass, salt)
+        return hash
+    },
+    checkPass: (newPass: string, pass: string) => {
+        var res = bcrypt.compareSync(newPass, pass) 
+        return res;
+    }
 }

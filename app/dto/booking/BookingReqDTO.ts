@@ -32,7 +32,7 @@ export default class BookingReqDTO {
         this.vehicle_partner_name = reqBody.vehicle_partner_name;
         this.booking_rental_date = reqBody.booking_rental_date;
         this.booking_return_date = reqBody.booking_return_date;
-        this.booking_delivery_form_id = reqBody.booking_deli_form_id;
+        this.booking_delivery_form_id = reqBody.booking_delivery_form_id;
         this.promotion_code = reqBody.promotion_code;
         this.booking_note = reqBody.booking_note;
         this.booking_code = reqBody["booking_code"] ? reqBody["booking_code"]:"";
@@ -133,8 +133,8 @@ export default class BookingReqDTO {
     setBookRetunDate(booking_retun_date: string){
         this.booking_return_date = booking_retun_date
     }
-    setBookDeliFormId(booking_deli_form_id: number){
-        this.booking_delivery_form_id = booking_deli_form_id
+    setBookDeliFormId(booking_delivery_form_id: number){
+        this.booking_delivery_form_id = booking_delivery_form_id
     }
     setPromoCode(promo_code: string){
         this.promotion_code = promo_code

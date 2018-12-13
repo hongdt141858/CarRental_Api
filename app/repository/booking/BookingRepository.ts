@@ -18,10 +18,12 @@ export default class BookingRepository {
     public async getOne(id: number) {
         return await this.bookRepository.findOne({ booking_id: id })
     }
-    public async create(booking: Booking) {
+    public async create(booking: any) {
+        delete booking["booking_id"]
+        console.log(booking)
         return await this.bookRepository.save(booking);
     }
-    public async update(id: number, booking: Booking): Promise<any> {
+    public async update(id: number, booking): Promise<any> {
         return await this.bookRepository.update(id, booking);
     }
     public async findByCode(code: string) {
