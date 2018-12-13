@@ -197,4 +197,11 @@ export class partner {
         })
     partner_delivery_home:number | null;
         
+
+    @Column("timestamp",{ 
+        nullable:true,
+        name:"date_delete"
+        })
+    date_delete:Date | null;
+        
 }

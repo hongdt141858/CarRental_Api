@@ -15,6 +15,7 @@ import { partner_holiday as PartHoliday } from "../entities/partner_holiday"
 import { procedure as Procedure } from "../entities/procedure"
 import { partner_procedure as PartProcedure } from "../entities/partner_procedure"
 import { MyUtil } from "../util/MyUtil";
+import { partner } from "../../output/entities/partner";
 
 export default class PartnerController {
     private partnerRepository: PartnerRepository;
@@ -59,9 +60,10 @@ export default class PartnerController {
     public postPartner = async (req: Request, res: Response) => {
         console.log("create a new partner ==> POST");
         var body = req.body;
-        let holidays = body.holidays;
-        let weekdays = body.weekdays;
-        let procedure_names = body.procedure_names;
+        // console.log(partner)
+        let holidays = body["holidays"];
+        let weekdays = body["weekdays"];
+        let procedure_names = body["procedure_names"];
 
         if (!(body && (body.city_id || body.city_name) && body.partner_name && body.partner_phone))
             MyUtil.handleError({ message: "No data!" }, res);
@@ -72,13 +74,19 @@ export default class PartnerController {
             let holidayPart = new Array<PartHoliday>();
 
             let check1, check2, check3, check = true;
+            console.log(holidays)
             if (holidays)
+            console.log("aaaaaaaaaaaaaaaaaaaaa")
                 await this.getPartHolidays(body.holidays, res, holidayPart)
                     .catch((err) => {
-                        MyUtil.handleError(err, res)
+                        
                         check = false
+                        console.log(err )
+                        MyUtil.handleError(err, res)
                     })
                     .then((result) => check1 = result);
+            if (!check)
+                console.log("aaaaaaaaaaaaaaaaaaaa")
             if (weekdays)
                 await this.getPartWeekdays(weekdays, res, weekdayPart)
                     .catch((err) => {
@@ -99,8 +107,8 @@ export default class PartnerController {
             delete body["weekdays"]
             delete body["procedure_names"]
             delete body["holidays"]
-            if (body["partner_create"])
-                body = Object.assign(body, { "partner_create": new Date() })
+            if (body["date_create"])
+                body = Object.assign(body, { "date_create": new Date() })
             partner = body;
             let checkPartner = true;
 
@@ -113,11 +121,15 @@ export default class PartnerController {
                     let err = { "message": "partner_name already exist" };
                     MyUtil.handleError(err, res);
                 } else {
-
+                    var end = false
                     let partner_id;
+                    if(partner_id == 9||partner_id == 10)
+                        console.log(partner)
                     await this.partnerRepository.save(partner)
-                        .then((result) => { partner_id = result.partner_id })
-                        .catch(err => MyUtil.handleError(err, res))
+                        .then((result) => { partner_id = result.partner_id; })
+                        .catch(err => { console.log(partner); MyUtil.handleError(err, res); end = true ; })
+                    if (end)
+                        return;
 
                     if (partner_id) {
                         if (check1) {
@@ -188,13 +200,14 @@ export default class PartnerController {
 
             for (var i = 0; i < arr.length; i++) {
                 let item = arr[i]
+                console.log(item)
                 let name = (item[0] + "").trim();
                 let option = await this.holidayRepository.findByName(name).catch(err => MyUtil.handleError(err, res))
                 let partHoliday = new PartHoliday();
                 let holi = new Holiday();
                 if (option) {
                     partHoliday.holiday_id = option ? option["holiday_id"] : null;
-                    partHoliday.partner_holiday_id = item[1];
+                    partHoliday.partner_extra_fee = item[1];
                     result.push(partHoliday)
                 } else {
                     check = false;

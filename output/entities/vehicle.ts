@@ -66,6 +66,14 @@ export class vehicle {
     transmission_name:string | null;
         
 
+    @Column("float",{ 
+        nullable:false,
+        precision:12,
+        name:"engin_number"
+        })
+    engin_number:number;
+        
+
     @Column("int",{ 
         nullable:true,
         name:"seat_id"

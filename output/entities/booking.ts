@@ -1,11 +1,8 @@
 import {Index,Entity, PrimaryColumn, Column, OneToOne, OneToMany, ManyToOne, ManyToMany, JoinColumn, JoinTable, RelationId} from "typeorm";
-import {booking_status} from "./booking_status";
-import {booking_price_detail} from "./booking_price_detail";
 
 
 @Entity("booking",{schema:"car_rental"})
 @Index("booking_code_UNIQUE",["booking_code",],{unique:true})
-@Index("booking_status_id",["booking_status_",])
 export class booking {
 
     @Column("int",{ 
@@ -207,11 +204,12 @@ export class booking {
     promotion_value:number | null;
         
 
-   
-    @ManyToOne(type=>booking_status, booking_status=>booking_status.bookings,{ onDelete: 'RESTRICT',onUpdate: 'RESTRICT' })
-    @JoinColumn({ name:'booking_status_id'})
-    booking_status_:booking_status | null;
-
+    @Column("int",{ 
+        nullable:true,
+        name:"booking_status_id"
+        })
+    booking_status_id:number | null;
+        
 
     @Column("int",{ 
         nullable:true,
@@ -247,9 +245,4 @@ export class booking {
         })
     booking_note:string | null;
         
-
-   
-    @OneToMany(type=>booking_price_detail, booking_price_detail=>booking_price_detail.booking_,{ onDelete: 'RESTRICT' })
-    booking_price_details:booking_price_detail[];
-    
 }
