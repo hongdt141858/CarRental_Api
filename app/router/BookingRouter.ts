@@ -16,5 +16,6 @@ router.get("/get-by-token", bookingController.getBookingsByToken);
 router.post("/send-email", bookingController.postSendEmail);
 router.post("/edit", bookingController.putEdit);
 router.get("/total_price", bookingController.getCalculateDeliPrice)
+// router.get("/total_price", bookin)
 router.post("/send-requirement", bookingController.postSendRequirement);
 module.exports = router;
