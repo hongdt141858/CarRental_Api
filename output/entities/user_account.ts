@@ -62,9 +62,9 @@ export class user_account {
 
     @Column("timestamp",{ 
         nullable:true,
-        name:"user_account_last_long"
+        name:"user_account_last_login"
         })
-    user_account_last_long:Date | null;
+    user_account_last_login:Date | null;
         
 
     @Column("timestamp",{ 

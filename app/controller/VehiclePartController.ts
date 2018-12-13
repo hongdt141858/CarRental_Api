@@ -269,7 +269,7 @@ export default class VehiclePartController {
         console.log("Get detail vehicle")
         let vehicle_partner_id = req.query.vehicle_partner_id;
         console.log(vehicle_partner_id)
-        let result = await this.getDetailVehicle(vehicle_partner_id, res).catch((err) => MyUtil.handleError(err, res))
+        let result = await this.getDetailVehicle(vehicle_partner_id).catch((err) => MyUtil.handleError(err, res))
         MyUtil.handleSuccess(result, res);
     }
 
@@ -295,12 +295,12 @@ export default class VehiclePartController {
         return vehiclePartner;
     }
 
-    getDetailVehicle = async (vehicle_partner_id: number, res: Response) => {
+    getDetailVehicle = async (vehicle_partner_id: number) => {
         let vehicle_id, partner_id, vehicle, partner;
         let vehiclePartner = {}
 
         if (vehicle_partner_id) {
-            let result = await this.vehiclePartRepository.getOne(vehicle_partner_id).catch((err) => MyUtil.handleError(err, res))
+            let result = await this.vehiclePartRepository.getOne(vehicle_partner_id).catch((err) => MyUtil.handleErrorFunction(err))
             if (result) {
                 vehicle_id = result.vehicle_id;
                 partner_id = result.partner_id;

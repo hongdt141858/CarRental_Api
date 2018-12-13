@@ -169,9 +169,9 @@ export class booking {
 
     @Column("int",{ 
         nullable:true,
-        name:"booking_deli_form_id"
+        name:"booking_delivery_form_id"
         })
-    booking_deli_form_id:number | null;
+    booking_delivery_form_id:number | null;
         
 
     @Column("varchar",{ 
