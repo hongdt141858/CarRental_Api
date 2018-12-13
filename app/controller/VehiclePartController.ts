@@ -7,6 +7,7 @@ import VehicleController from "./vehicle/VehicleController"
 import PartnerController from "./PartnerController"
 import PartnerRepository from "../repository/PartnerRepository"
 import { MyUtil } from "../util/MyUtil";
+import { partner } from "../entities/partner";
 
 export default class VehiclePartController {
     private vehicleRepository: VehicleRepository;
@@ -208,7 +209,7 @@ export default class VehiclePartController {
                 vehicle_partner_hide = params.vehicle_partner_hide;
 
 
-            option2["partner_delete"] = null;
+            option2["date_delete"] = null;
             if (params.brand_id && params.brand_id != 0) {
                 option1["brand_id"] = Number.parseInt(params.brand_id)
             }
@@ -224,8 +225,9 @@ export default class VehiclePartController {
             if (params.city_id) {
                 option2["city_id"] = params.city_id;
             }
+            console.log(option1, option2)
             vehicles = await this.vehicleRepository.findByVehicleOption(option1).catch((err) => MyUtil.handleError({ "message": "error find vehicle option" }, res))
-
+            console.log(vehicle)
             if (vehicles) {
                 for (let i = 0; i < vehicles.length; i++) {
                     vehicleIds.push(vehicles[i]["vehicle_id"])
@@ -233,6 +235,7 @@ export default class VehiclePartController {
             }
 
             partners = await this.partnerRepository.findByOptions(option2).catch((err) => MyUtil.handleError(err, res))
+        //    console.log(partners)
             if (partners) {
                 for (let i = 0; i < partners.length; i++) {
                     partnerIds.push(partners[i]["partner_id"])
@@ -247,7 +250,7 @@ export default class VehiclePartController {
                 for (let i = 0; i < vehiclePartners[1]; i++) {
                     var vehicle;
 
-                    vehicle = await this.getDetailVehicle(list[i].vehicle_partner_id, res).catch((err) => MyUtil.handleError(err, res))
+                    vehicle = await this.getDetailVehicleShort(list[i].vehicle_partner_id, res).catch((err) => MyUtil.handleError(err, res))
 
                     if (vehicle)
                         listVehicle.push(vehicle)
@@ -265,6 +268,7 @@ export default class VehiclePartController {
     getDetailVehicleParter = async (req: Request, res: Response, next: NextFunction) => {
         console.log("Get detail vehicle")
         let vehicle_partner_id = req.query.vehicle_partner_id;
+        console.log(vehicle_partner_id)
         let result = await this.getDetailVehicle(vehicle_partner_id, res).catch((err) => MyUtil.handleError(err, res))
         MyUtil.handleSuccess(result, res);
     }

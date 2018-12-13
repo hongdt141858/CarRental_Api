@@ -22,10 +22,5 @@ export class city {
         name:"city_name"
         })
     city_name:string;
-        
-
-   
-    @OneToMany(type=>partner, partner=>partner.city_,{ onDelete: 'RESTRICT' })
-    partners:partner[];
     
 }
