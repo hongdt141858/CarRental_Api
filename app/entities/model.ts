@@ -21,6 +21,7 @@ export class model {
         name:"model_name"
         })
     model_name:string;
+        
 
     @Column("int",{ 
         nullable:false,

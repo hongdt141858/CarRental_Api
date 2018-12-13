@@ -1,9 +1,7 @@
 import {Index,Entity, PrimaryColumn, Column, OneToOne, OneToMany, ManyToOne, ManyToMany, JoinColumn, JoinTable, RelationId} from "typeorm";
-import {booking} from "./booking";
 
 
 @Entity("booking_price_detail",{schema:"car_rental"})
-@Index("booking_id",["booking_",])
 export class booking_price_detail {
 
     @Column("int",{ 
@@ -15,11 +13,12 @@ export class booking_price_detail {
     booking_price_detail_id:number;
         
 
-   
-    @ManyToOne(type=>booking, booking=>booking.booking_price_details,{  nullable:false,onDelete: 'RESTRICT',onUpdate: 'RESTRICT' })
-    @JoinColumn({ name:'booking_id'})
-    booking_:booking | null;
-
+    @Column("int",{ 
+        nullable:false,
+        name:"booking_id"
+        })
+    booking_id:number;
+        
 
     @Column("int",{ 
         nullable:false,

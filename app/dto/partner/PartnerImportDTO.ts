@@ -30,7 +30,6 @@ export default class PartnerReqDTO {
     private procedure_names: string[];
     private weekdays: string[];
     private holidays: string[];
-    private day_packs: string[];
 
     constructor(arr) {
         if (arr[0])

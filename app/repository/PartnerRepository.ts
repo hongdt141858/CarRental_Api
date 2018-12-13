@@ -4,7 +4,7 @@ import { Repository, getConnectionManager } from "typeorm";
 export default class PartnerRepository {
     private partnerRepository: Repository<Partner>;
     constructor() {
-        this.partnerRepository = getConnectionManager().get("car_renatl").getRepository(Partner);
+        this.partnerRepository = getConnectionManager().get("car_rental").getRepository(Partner);
     }
 
     public async getAll() {
@@ -19,7 +19,7 @@ export default class PartnerRepository {
     }
 
     public async findByName(name: string) {
-        return await this.partnerRepository.findOne({ "partner_name": name});
+        return await this.partnerRepository.findOne({ "partner_name": name });
     }
 
     public async findByEmail(email: string) {

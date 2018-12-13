@@ -78,12 +78,6 @@ export class vehicle_partner {
         name:"vehicle_partner_quantity_total"
         })
     vehicle_partner_quantity_total:number | null;
-
-    @Column("int",{ 
-        nullable:true,
-        name:"vehicle_partner_deposit"
-        })
-    vehicle_partner_deposit:number | null;
         
 
     @Column("int",{ 
