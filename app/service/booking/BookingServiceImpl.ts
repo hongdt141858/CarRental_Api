@@ -1,7 +1,7 @@
 import IBookingService from "./IBookingService";
 import { booking as Booking } from "../../entities/booking"
 import BookingRepository from "../../repository/booking/BookingRepository";
-import { booking_feedback  as BookingFeedback} from "../../entities/booking_feedback";
+import { booking_feedback as BookingFeedback } from "../../entities/booking_feedback";
 import BookFedbakRepository from "../../repository/booking/BookFedbakRepository";
 import { booking_price_detail as BookingPriceDetail } from "../../entities/booking_price_detail";
 import BookPriceDetailRepository from "../../repository/booking/BookPriceDetailRepository";
@@ -78,12 +78,14 @@ export default class BookingService implements IBookingService {
             .catch(err => console.log(err));
 
         if (!vehiclePartner) throw new Error("Vehicle partner is not existed!");
-        var user_account_id = bookReq.user_account_id;
+        var user_account_id;
+        if (bookReq["user_account_id"])
+            user_account_id = bookReq["user_account_id"]
         var userAccount = new UserAccount();
         if (user_account_id) await this.userRepository.getOne(user_account_id)
             .then(data => userAccount = data)
             .catch(err => console.log(err));
-        var booking = new Booking();
+        var booking = {};
         var vehicle = new Vehicle();
         var partner = new Partner();
         vehicle = vehiclePartner["vehicle"];
@@ -94,42 +96,54 @@ export default class BookingService implements IBookingService {
         if (!(booking_rental_date && booking_return_date)) throw new Error("Rental Date and Return Date is null!!")
         var rentalDate = new Date(booking_rental_date);
         var returnDate = new Date(booking_return_date);
-        if ((rentalDate.getTime() < new Date().getTime()) || (returnDate.getTime() < new Date().getTime()) || (returnDate.getTime() < rentalDate.getTime())) throw new Error("rental and return time is not invalid")
+        if ((rentalDate.getTime() < new Date().getTime()) || (returnDate.getTime() < new Date().getTime()) || (returnDate.getTime() < rentalDate.getTime())) throw new Error((rentalDate.getTime() < new Date().getTime()) + "" + (returnDate.getTime() < new Date().getTime()) + "," + (returnDate.getTime() < rentalDate.getTime()))
 
         // create booking
-        if (userAccount) booking.user_account_id = userAccount.user_account_id;
-        booking.customer_name = bookReq.customer_name;
-        booking.customer_email = bookReq.customer_email;
-        booking.customer_phone = bookReq.customer_phone;
-        booking.customer_delivery_address = bookReq.customer_delivery_address;
-        booking.customer_delivery_lat = bookReq.customer_delivery_lat;
-        booking.customer_delivery_long = bookReq.customer_delivery_long;
-        booking.partner_id = partner.partner_id;
-        booking.partner_name = partner.partner_name;
-        booking.city_id = partner.city_id;
-        booking.city_name = partner.city_name;
+        if (userAccount["user_account_id"]) {
+            console.log(userAccount, "hhhhhhhhhhhhhhhhhhh")
+           
+            booking["user_account_id"] = userAccount.user_account_id
+        };
+        booking["customer_name"] = bookReq.customer_name;
+        booking["customer_email"] = bookReq.customer_email;
+        booking["customer_phone"] = bookReq.customer_phone;
+        if (bookReq["customer_delivery_address"])
+            booking["customer_delivery_address"] = bookReq["customer_delivery_address"];
+        if (bookReq["customer_delivery_lat"])
+            booking["customer_delivery_lat"] = bookReq.customer_delivery_lat;
+        if (bookReq["customer_delivery_long"])
+            booking["customer_delivery_long"] = bookReq.customer_delivery_long;
+        booking["partner_id"] = partner.partner_id;
+        booking["partner_name"] = partner.partner_name;
+        booking["city_id"] = partner.city_id;
+        booking["city_name"] = partner.city_name;
         console.log("rentalDate - returnDate" + rentalDate + " - " + returnDate)
-        booking.booking_rental_date = rentalDate;
-        booking.booking_return_date = returnDate;
-        booking.booking_note = bookReq.booking_note;
+        booking["booking_rental_date"] = rentalDate;
+        booking["booking_return_date"] = returnDate;
+        booking["booking_note"] = bookReq.booking_note;
 
-        booking.vehicle_partner_id = vehiclePartner["vehicle_partner_id"];
-        booking.vehicle_partner_name = vehiclePartner["vehicle_partner_name"];
-        booking.booking_status_id = 1;
-        booking.booking_day_number = this.getDayNum(rentalDate, returnDate, partner);
-        booking.booking_extra_hour = this.getExtaHourNum(rentalDate, returnDate, partner)
-        booking.booking_weekday_number = this.getWdayNum(rentalDate, returnDate, partner)
-        booking.booking_holiday_number = this.getHoliNum(rentalDate, returnDate, partner)
-        booking.booking_delivery_form_id = bookReq.booking_delivery_form_id;
-        booking.promotion_value = await this.calculatePromoPrice(bookReq);
-        booking.promotion_code = booking.promotion_value !== 0 ? bookReq.promotion_code: "";
-        booking.booking_price_total = 0;
-        booking.booking_date_create = bookReq.booking_date_create == "" ? new Date() : new Date(bookReq.booking_date_create);
-        if(bookReq.booking_id != "")
-            booking.booking_id = parseInt(bookReq.booking_id)
+        booking["vehicle_partner_id"] = vehiclePartner["vehicle_partner_id"];
+        booking["vehicle_partner_name"] = vehiclePartner["vehicle_partner_name"];
+        booking["booking_status_id"] = 1;
+        booking["booking_day_number"] = this.getDayNum(rentalDate, returnDate, partner);
+        booking["booking_extra_hour"] = this.getExtaHourNum(rentalDate, returnDate, partner)
+        booking["booking_weekday_number"] = this.getWdayNum(rentalDate, returnDate, partner)
+        booking["booking_holiday_number"] = this.getHoliNum(rentalDate, returnDate, partner)
+        booking["booking_delivery_form_id"] = bookReq.booking_delivery_form_id;
+        if (booking["promotion_value"]) {
+            booking["promotion_value"] = await this.calculatePromoPrice(bookReq);
+            booking["promotion_code"] = booking["promotion_value"] !== 0 ? bookReq.promotion_code : "";
+        }
+        booking["booking_price_total"] = 0;
+        booking["booking_date_create"] = !bookReq["booking_date_create"] ? new Date() : new Date(bookReq.booking_date_create);
+        console.log("$$$$$$$$$$$$\n", booking, bookReq["booking_date_create"])
+        console.log(bookReq["booking_date_create"])
+        if (bookReq["booking_id"] != "")
+            booking["booking_id"] = parseInt(bookReq.booking_id)
         await this.bookingRepository.create(booking)
             .then(result => {
                 booking = result
+                console.log(result,"??????????????????")
             })
             .catch(err => {
                 throw new Error(err)
@@ -137,29 +151,32 @@ export default class BookingService implements IBookingService {
 
         if (!booking) throw new Error("Don't create a new booking");
 
-        if (bookReq.booking_code== "")
-            booking.booking_code = await this.createBookingCode(booking);
+        if (!bookReq["booking_code"] )
+            booking["booking_code"] = await this.createBookingCode(booking);
         else
-            booking.booking_code = bookReq.booking_code
-
-        await this.bookingRepository.update(booking.booking_id, booking)
+            booking["booking_code"] = bookReq.booking_code
+            console.log(booking["booking_code"])
+             console.log("PPPPPPPPPPPPPPPPPPPP", booking)
+        
+        await this.bookingRepository.update(booking["booking_id"], booking)
             .catch(err => { throw new Error(err) })
 
         // create detail price
 
         await this.calculateDetailPrice(booking, vehiclePartner)
             .then(async result => {
+                console.log("&&&&&&&&&&&&", result)
                 await this.saveDetailPrice(result.booking_price_details)
                     .catch(err => console.log(err))
-                booking.booking_price_total = result.price_total;
+                booking["booking_price_total"] = result.price_total;
             })
             .catch(err => console.log(err));
 
-        await this.bookingRepository.update(booking.booking_id, booking)
+        await this.bookingRepository.update(booking["booking_id"], booking)
             .catch(err => { throw new Error(err) })
 
         var newBooking: Booking
-        await this.getByCode(booking.booking_code)
+        await this.getByCode(booking["booking_code"])
             .then(res => newBooking = res)
             .catch(err => { throw new Error(err) })
         console.log(newBooking)
@@ -175,7 +192,7 @@ export default class BookingService implements IBookingService {
         return detailBooking;
     }
 
-    public async calculateDeliPrice(bookingReq:Booking): Promise<object> {
+    public async calculateDeliPrice(bookingReq: Booking): Promise<object> {
         if (!bookingReq) throw new Error("Data is not be empty!");
         var vehicle_partner_id = bookingReq.vehicle_partner_id;
         var vehiclePartner = null;
@@ -230,10 +247,10 @@ export default class BookingService implements IBookingService {
         return result;
     }
 
-    public async calculatePromoPrice(bookingReq:any): Promise<any> {
+    public async calculatePromoPrice(bookingReq: any): Promise<any> {
         if (!bookingReq) throw new Error("Request is null");
-        if (!bookingReq.getPromoCode()) return 0;
-        var code = bookingReq.getPromoCode();
+        if (!bookingReq.promotion_code) return 0;
+        var code = bookingReq.promotion_code;
         code = code.toLowerCase();
         console.log("code: ", code)
         var promotion = new Promotion();
@@ -324,6 +341,7 @@ export default class BookingService implements IBookingService {
     }
 
     async calculateDetailPrice(booking, vehiclePartner) {
+        console.log("WWWWWWWWWWWWWW", booking)
         if (!booking || !vehiclePartner) throw new Error("Data is not be null!");
         var defaPrice = vehiclePartner["vehicle_partner_default_price"] || 0
         var priceTypes = new Array<BookingPriceType>();
@@ -346,6 +364,7 @@ export default class BookingService implements IBookingService {
                         dtlPrice.booking_price_quantity = booking.booking_day_number;
                         dtlPrice.unit_price = defaPrice;
                         dtlPrice.detail_price_total = dtlPrice.unit_price * dtlPrice.booking_price_quantity;
+                        dtlPrice.detail_price_total = dtlPrice.detail_price_total? dtlPrice.detail_price_total : 0;
                         await this.getBookPriceDetail(dtlPrice)
                             .then(result => bookPriceDetails.push(result))
                             .catch(err => console.log(err))
@@ -358,6 +377,7 @@ export default class BookingService implements IBookingService {
                         dtlPrice.detail_price_total = booking.booking_weekday_number;
                         dtlPrice.unit_price = wdayExtraFee;
                         dtlPrice.detail_price_total = dtlPrice.booking_price_quantity * dtlPrice.unit_price;
+                        dtlPrice.detail_price_total = dtlPrice.detail_price_total? dtlPrice.detail_price_total : 0;
                         await this.getBookPriceDetail(dtlPrice)
                             .then(result => bookPriceDetails.push(result))
                             .catch(err => console.log(err))
@@ -370,6 +390,7 @@ export default class BookingService implements IBookingService {
                         dtlPrice.booking_price_quantity = booking.booking_holiday_number;
                         dtlPrice.unit_price = holiExtraFee;
                         dtlPrice.detail_price_total = dtlPrice.booking_price_quantity * dtlPrice.unit_price;
+                        dtlPrice.detail_price_total = dtlPrice.detail_price_total? dtlPrice.detail_price_total : 0;
                         await this.getBookPriceDetail(dtlPrice)
                             .then(result => bookPriceDetails.push(result))
                             .catch(err => console.log(err))
@@ -386,6 +407,7 @@ export default class BookingService implements IBookingService {
                         dtlPrice.booking_price_quantity = booking.booking_delivery_form_id;
                         dtlPrice.unit_price = deli ? deli["price"] : 0;
                         dtlPrice.detail_price_total = dtlPrice.booking_price_quantity * dtlPrice.unit_price;
+                        dtlPrice.detail_price_total = dtlPrice.detail_price_total? dtlPrice.detail_price_total : 0;
                         await this.getBookPriceDetail(dtlPrice)
                             .then(result => bookPriceDetails.push(result))
                             .catch(err => console.log(err))
@@ -396,6 +418,7 @@ export default class BookingService implements IBookingService {
                         dtlPrice.booking_price_quantity = 0;
                         dtlPrice.unit_price = 0;
                         dtlPrice.detail_price_total = dtlPrice.booking_price_quantity * dtlPrice.unit_price;
+                        dtlPrice.detail_price_total = dtlPrice.detail_price_total? dtlPrice.detail_price_total : 0;
                         await this.getBookPriceDetail(dtlPrice)
                             .then(result => bookPriceDetails.push(result))
                             .catch(err => console.log(err))
@@ -412,6 +435,7 @@ export default class BookingService implements IBookingService {
                         dtlPrice.booking_price_quantity = booking.booking_day_number;
                         dtlPrice.unit_price = promotion
                         dtlPrice.detail_price_total = dtlPrice.booking_price_quantity * dtlPrice.unit_price;
+                        dtlPrice.detail_price_total = dtlPrice.detail_price_total? dtlPrice.detail_price_total : 0;
                         await this.getBookPriceDetail(dtlPrice)
                             .then(result => bookPriceDetails.push(result))
                             .catch(err => console.log(err))
@@ -520,7 +544,7 @@ export default class BookingService implements IBookingService {
         await this.bookingStatusRepo.getById(result.booking_status_id)
             .then(status => bookStatus = status)
             .catch(err => console.log(err))
-        result["booking_status"]= bookStatus;
+        result["booking_status"] = bookStatus;
 
 
         var vehiclePartner = new VehiclePartner();
@@ -534,14 +558,14 @@ export default class BookingService implements IBookingService {
             .then(data => vehicleImages = data)
             .catch(err => console.log(err))
 
-        result["vehicle_images"]= vehicleImages
+        result["vehicle_images"] = vehicleImages
 
         return result;
     }
 
     getBookPriceDetail = async (bookPriceDetail) => {
 
-        var bookPriceDetailDTO =bookPriceDetail;
+        var bookPriceDetailDTO = bookPriceDetail;
         if (bookPriceDetailDTO) {
             await this.priceTypeRepo.findById((bookPriceDetailDTO.booking_price_type_id))
                 .then(result => {
@@ -624,7 +648,7 @@ export default class BookingService implements IBookingService {
         return sum
     }
 
-    createBookingCode = async (booking: Booking): Promise<string> => {
+    createBookingCode = async (booking): Promise<string> => {
         var city = new City();
         city = await this.cityRepository.getOne(booking.city_id);
         if (!city) return "";
@@ -635,25 +659,27 @@ export default class BookingService implements IBookingService {
         var dateStr = rentalDate.getFullYear().toString().substr(-2) + month
         var booking_id = booking.booking_id;
         booking_id = (booking_id > 10000) ? booking_id : (10000 + booking_id)
-        var bookCode =  dateStr + booking_id
+        var bookCode = dateStr + booking_id
+        console.log(bookCode)
         return bookCode ? bookCode : ""
 
     }
 
     saveDetailPrice = async (dtlPrice: BookingPriceDetail[]): Promise<BookingPriceDetail[]> => {
-        var result = new Array<BookingPriceDetail>();
+        var result = [];
         if (dtlPrice && dtlPrice.length > 0) {
             for (let i = 0; i < dtlPrice.length; i++) {
                 var price = new BookingPriceDetail();
                 price.booking_id = dtlPrice[i].booking_id;
-                price.booking_price_detail_id = dtlPrice[i].booking_price_detail_id;
+                // price.booking_price_detail_id = dtlPrice[i].booking_price_detail_id;
                 price.booking_price_type_id = dtlPrice[i].booking_price_type_id;
-                price.detail_price_total = dtlPrice[i].detail_price_total;
+                price.detail_price_total = dtlPrice[i]["detail_price_total"] ? dtlPrice[i]["detail_price_total"] : 0;
                 price.booking_price_quantity = dtlPrice[i].booking_price_quantity;
                 price.unit_price = dtlPrice[i].unit_price;
+                console.log("GGGGGGGGGGGGGGGGGGG",price)
                 await this.bookingPriceDetailRepo.create(price)
-                    .then(data => result.push(data))
-                    .catch(err => { throw new Error(err) })
+                    .then(data => {result.push(data); console.log(data,"????????????????")})
+                    .catch(err => { console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");throw new Error(err) })
             }
         }
         return result;
