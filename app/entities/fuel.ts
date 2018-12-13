@@ -3,6 +3,7 @@ import {Index,Entity, PrimaryColumn, Column, OneToOne, OneToMany, ManyToOne, Man
 
 @Entity("fuel",{schema:"car_rental"})
 @Index("fuel_name_UNIQUE",["fuel_name",],{unique:true})
+@Index("fuel_slug_UNIQUE",["fuel_slug",],{unique:true})
 export class fuel {
 
     @Column("int",{ 
@@ -22,6 +23,7 @@ export class fuel {
         })
     fuel_name:string;
         
+
     @Column("varchar",{ 
         nullable:false,
         unique: true,
@@ -29,4 +31,5 @@ export class fuel {
         name:"fuel_slug"
         })
     fuel_slug:string;
+        
 }

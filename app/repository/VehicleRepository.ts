@@ -45,6 +45,7 @@ export default class VehicleRepository  implements IVehicleRepository {
     }
 
     public async  findIdByName(brand_name, model_name, vehicle_name):Promise <Vehicle>{
+        console.log({"brand_name":brand_name,"model_name": model_name, "vehicle_name": vehicle_name}, "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
         return  await this.vehicleRepo.findOne({"brand_name":brand_name,"model_name": model_name, "vehicle_name": vehicle_name})
     }
 

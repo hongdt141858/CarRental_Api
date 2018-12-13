@@ -4,7 +4,7 @@ import { Repository, getConnectionManager } from "typeorm";
 export default class PartDayPackRepository{
     private partHolidayRepo: Repository<PartHoliday>;
     constructor() {
-        this.partHolidayRepo = getConnectionManager().get("chungxe_partner").getRepository(PartHoliday);
+        this.partHolidayRepo = getConnectionManager().get("car_rental").getRepository(PartHoliday);
     }
 
     public async getAll() {

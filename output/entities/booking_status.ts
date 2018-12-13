@@ -1,5 +1,4 @@
 import {Index,Entity, PrimaryColumn, Column, OneToOne, OneToMany, ManyToOne, ManyToMany, JoinColumn, JoinTable, RelationId} from "typeorm";
-import {booking} from "./booking";
 
 
 @Entity("booking_status",{schema:"car_rental"})
@@ -31,9 +30,4 @@ export class booking_status {
         })
     booking_status_icon:string | null;
         
-
-   
-    @OneToMany(type=>booking, booking=>booking.booking_status_,{ onDelete: 'RESTRICT' })
-    bookings:booking[];
-    
 }

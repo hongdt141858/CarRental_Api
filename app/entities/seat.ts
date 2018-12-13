@@ -14,10 +14,9 @@ export class seat {
     seat_id:number;
         
 
-    @Column("varchar",{ 
+    @Column("int",{ 
         nullable:false,
         unique: true,
-        length:11,
         name:"seat_number"
         })
     seat_number:number;

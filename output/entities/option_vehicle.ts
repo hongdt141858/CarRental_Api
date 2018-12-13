@@ -5,6 +5,7 @@ import {Index,Entity, PrimaryColumn, Column, OneToOne, OneToMany, ManyToOne, Man
 export class option_vehicle {
 
     @Column("int",{ 
+        generated:true,
         nullable:false,
         primary:true,
         name:"option_vehicle_id"

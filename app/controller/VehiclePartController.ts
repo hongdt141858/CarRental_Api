@@ -68,25 +68,24 @@ export default class VehiclePartController {
     };
 
     handleCheckVehiclePartner = async (value, res) => {
+        console.log(value)
         let checkVehicle;
         var end = false;
         let vehicle: VehiclePartner = new VehiclePartner();
 
         let data = value;
         let brand_name = value["brand_name"];
-        let model_name = value["modl_name"];
+        let model_name = value["model_name"];
         let vehicle_partner_name;
         let vehicle_name = value["vehicle_name"];
-        if (!model_name) {
-            data["model_name"] = null
-            vehicle_partner_name = brand_name + " " + vehicle_name + " " + value["vehicle_partner_year"];
-        } else {
-            vehicle_partner_name = brand_name + " " + model_name + " " + vehicle_name + " " + value["vehicle_partner_year"];
-        }
+
+        vehicle_partner_name = brand_name + " " + model_name + " " + vehicle_name + " " + value["vehicle_partner_year"];
         data["vehicle_partner_name"] = vehicle_partner_name;
+        data["vehicle_partner_slug"] = MyUtil.slug(vehicle_partner_name);
 
         delete data["brand_id"]
         vehicle = data;
+        console.log(vehicle, "??????????????????????????????????")
         let obj = { "vehicle_partner_name": vehicle_partner_name, "partner_id": value["partner_id"] }
 
         checkVehicle = await this.vehiclePartRepository.findByVehicleOption(obj).catch(err => {
@@ -102,9 +101,12 @@ export default class VehiclePartController {
             end = true;
         }
         else {
+            console.log(vehicle["vehicle_id"], "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
             if (!vehicle["vehicle_id"])
+            console.log(vehicle["vehicle_id"], "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
                 await this.vehicleRepository.findIdByName(brand_name, model_name, vehicle_name)
                     .then((result) => {
+                        console.log(result, "#######################")
                         vehicle.vehicle_id = result ? result.vehicle_id : null
                     })
                     .catch((err) => { MyUtil.handleError(err, res); end = true })
@@ -127,7 +129,7 @@ export default class VehiclePartController {
             var result;
             if (vehicle.vehicle_id) {
                 result = await this.vehiclePartRepository.create(vehicle).catch(err => MyUtil.handleError(err, res))
-                MyUtil.handleSuccess(result, res)
+                // MyUtil.handleSuccess(result, res)
                 return;
             }
 

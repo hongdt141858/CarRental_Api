@@ -21,10 +21,10 @@ export class transmission {
         name:"transmission_name"
         })
     transmission_name:string;
+        
 
     @Column("varchar",{ 
         nullable:false,
-        unique: true,
         length:255,
         name:"transmission_slug"
         })

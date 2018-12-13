@@ -42,12 +42,6 @@ export class vehicle {
         })
     model_id:number | null;
         
-    @Column("float",{ 
-        nullable:true,
-        precision:12,
-        name:"engin_number"
-        })
-        engin_number:number | null;
 
     @Column("varchar",{ 
         nullable:true,
@@ -70,6 +64,14 @@ export class vehicle {
         name:"transmission_name"
         })
     transmission_name:string | null;
+        
+
+    @Column("float",{ 
+        nullable:false,
+        precision:12,
+        name:"engin_number"
+        })
+    engin_number:number;
         
 
     @Column("int",{ 
