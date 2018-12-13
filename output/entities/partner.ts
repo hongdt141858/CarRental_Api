@@ -1,11 +1,9 @@
 import {Index,Entity, PrimaryColumn, Column, OneToOne, OneToMany, ManyToOne, ManyToMany, JoinColumn, JoinTable, RelationId} from "typeorm";
-import {city} from "./city";
 
 
 @Entity("partner",{schema:"car_rental"})
 @Index("partner_name_UNIQUE",["partner_name",],{unique:true})
 @Index("partner_phone_UNIQUE",["partner_phone",],{unique:true})
-@Index("city_id",["city_",])
 export class partner {
 
     @Column("int",{ 
@@ -29,7 +27,7 @@ export class partner {
     @Column("varchar",{ 
         nullable:false,
         unique: true,
-        length:45,
+        length:255,
         name:"partner_phone"
         })
     partner_phone:string;
@@ -37,7 +35,7 @@ export class partner {
 
     @Column("varchar",{ 
         nullable:true,
-        length:50,
+        length:255,
         name:"partner_email"
         })
     partner_email:string | null;
@@ -51,11 +49,12 @@ export class partner {
     partner_logo:string | null;
         
 
-   
-    @ManyToOne(type=>city, city=>city.partners,{  nullable:false,onDelete: 'RESTRICT',onUpdate: 'RESTRICT' })
-    @JoinColumn({ name:'city_id'})
-    city_:city | null;
-
+    @Column("int",{ 
+        nullable:true,
+        name:"city_id"
+        })
+    city_id:number | null;
+        
 
     @Column("float",{ 
         nullable:true,
@@ -203,5 +202,13 @@ export class partner {
         name:"date_delete"
         })
     date_delete:Date | null;
+        
+
+    @Column("varchar",{ 
+        nullable:true,
+        length:255,
+        name:"city_name"
+        })
+    city_name:string | null;
         
 }

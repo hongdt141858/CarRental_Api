@@ -123,21 +123,6 @@ export class booking {
     city_name:string | null;
         
 
-    @Column("int",{ 
-        nullable:false,
-        name:"vhc_type_id"
-        })
-    vhc_type_id:number;
-        
-
-    @Column("varchar",{ 
-        nullable:true,
-        length:50,
-        name:"vhc_type_name"
-        })
-    vhc_type_name:string | null;
-        
-
     @Column("timestamp",{ 
         nullable:false,
         default:"CURRENT_TIMESTAMP",
