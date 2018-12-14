@@ -30,5 +30,8 @@
     "tabletop": "^1.5.2",
     "typeorm": "^0.2.9",
     "typeorm-model-generator": "^0.2.22"
+  },
+  "devDependencies": {
+    "har-validator": "^5.1.3"
   }
 }
