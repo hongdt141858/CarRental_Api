@@ -58,19 +58,18 @@ export class vehicle_partner {
     vehicle_partner_year:number;
         
 
-    @Column("varchar",{ 
-        nullable:true,
-        length:255,
-        name:"vehicle_partner_description"
-        })
-    vehicle_partner_description:string | null;
-        
-
     @Column("int",{ 
         nullable:false,
         name:"vehicle_partner_default_price"
         })
     vehicle_partner_default_price:number;
+        
+
+    @Column("int",{ 
+        nullable:true,
+        name:"vehicle_partner_deposit"
+        })
+    vehicle_partner_deposit:number | null;
         
 
     @Column("int",{ 
@@ -137,5 +136,13 @@ export class vehicle_partner {
         name:"vehicle_partner_delete"
         })
     vehicle_partner_delete:Date | null;
+        
+
+    @Column("varchar",{ 
+        nullable:true,
+        length:255,
+        name:"vehicle_partner_description"
+        })
+    vehicle_partner_description:string | null;
         
 }

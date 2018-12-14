@@ -1,5 +1,4 @@
 import {Index,Entity, PrimaryColumn, Column, OneToOne, OneToMany, ManyToOne, ManyToMany, JoinColumn, JoinTable, RelationId} from "typeorm";
-import {partner} from "./partner";
 
 
 @Entity("city",{schema:"car_rental"})
@@ -23,9 +22,4 @@ export class city {
         })
     city_name:string;
         
-
-   
-    @OneToMany(type=>partner, partner=>partner.city_,{ onDelete: 'RESTRICT' })
-    partners:partner[];
-    
 }

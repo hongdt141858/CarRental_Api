@@ -2,7 +2,7 @@ import {Index,Entity, PrimaryColumn, Column, OneToOne, OneToMany, ManyToOne, Man
 
 
 @Entity("booking",{schema:"car_rental"})
-@Index("booking_code_UNIQUE",["booking_code",],{unique:true})
+@Index("booking_id_UNIQUE",["booking_id",],{unique:true})
 export class booking {
 
     @Column("int",{ 
@@ -16,7 +16,6 @@ export class booking {
 
     @Column("varchar",{ 
         nullable:true,
-        unique: true,
         length:255,
         name:"booking_code"
         })
@@ -116,26 +115,11 @@ export class booking {
         
 
     @Column("varchar",{ 
-        nullable:true,
+        nullable:false,
         length:50,
         name:"city_name"
         })
-    city_name:string | null;
-        
-
-    @Column("int",{ 
-        nullable:false,
-        name:"vhc_type_id"
-        })
-    vhc_type_id:number;
-        
-
-    @Column("varchar",{ 
-        nullable:true,
-        length:50,
-        name:"vhc_type_name"
-        })
-    vhc_type_name:string | null;
+    city_name:string;
         
 
     @Column("timestamp",{ 
@@ -184,9 +168,9 @@ export class booking {
 
     @Column("int",{ 
         nullable:true,
-        name:"booking_deli_form_id"
+        name:"booking_delivery_form_id"
         })
-    booking_deli_form_id:number | null;
+    booking_delivery_form_id:number | null;
         
 
     @Column("varchar",{ 
