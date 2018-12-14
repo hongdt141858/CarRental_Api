@@ -3,6 +3,7 @@ import { vehicle_partner as VehiclePartner } from "../entities/vehicle_partner";
 import { Request, Response, NextFunction } from "express";
 import VehiclePartRepository from "../repository/VehiclePartRepository";
 import VehicleRepository from "../repository/VehicleRepository"
+import ImageRepository from "../repository/ImageRepository"
 import VehicleController from "./vehicle/VehicleController"
 import PartnerController from "./PartnerController"
 import PartnerRepository from "../repository/PartnerRepository"
@@ -15,6 +16,7 @@ export default class VehiclePartController {
     private vehiclePartRepository: VehiclePartRepository;
     private vehicleController: VehicleController;
     private partnerController: PartnerController;
+    private imageRepository: ImageRepository
 
 
     constructor() {
@@ -23,6 +25,7 @@ export default class VehiclePartController {
         this.partnerRepository = new PartnerRepository();
         this.vehicleController = new VehicleController();
         this.partnerController = new PartnerController();
+        this.imageRepository = new ImageRepository();
     }
 
     public getAll = async (req: Request, res: Response, next: NextFunction) => {
@@ -104,13 +107,13 @@ export default class VehiclePartController {
         else {
             console.log(vehicle["vehicle_id"], "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
             if (!vehicle["vehicle_id"])
-            console.log(vehicle["vehicle_id"], "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
-                await this.vehicleRepository.findIdByName(brand_name, model_name, vehicle_name)
-                    .then((result) => {
-                        console.log(result, "#######################")
-                        vehicle.vehicle_id = result ? result.vehicle_id : null
-                    })
-                    .catch((err) => { MyUtil.handleError(err, res); end = true })
+                console.log(vehicle["vehicle_id"], "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
+            await this.vehicleRepository.findIdByName(brand_name, model_name, vehicle_name)
+                .then((result) => {
+                    console.log(result, "#######################")
+                    vehicle.vehicle_id = result ? result.vehicle_id : null
+                })
+                .catch((err) => { MyUtil.handleError(err, res); end = true })
 
         }
 
@@ -235,7 +238,7 @@ export default class VehiclePartController {
             }
 
             partners = await this.partnerRepository.findByOptions(option2).catch((err) => MyUtil.handleError(err, res))
-        //    console.log(partners)
+            //    console.log(partners)
             if (partners) {
                 for (let i = 0; i < partners.length; i++) {
                     partnerIds.push(partners[i]["partner_id"])
@@ -282,8 +285,16 @@ export default class VehiclePartController {
             if (result) {
                 vehicle_id = result.vehicle_id;
                 partner_id = result.partner_id;
+                var vehicle_images;
                 partner = await this.partnerRepository.getOne(partner_id).catch((err) => MyUtil.handleErrorFunction(err))
                 vehicle = await this.vehicleRepository.getOne(vehicle_id).catch((err) => MyUtil.handleErrorFunction(err))
+                await this.imageRepository.findByImageTable("vehicle", vehicle_id).catch(err => MyUtil.handleErrorFunction(err))
+                    .then(result => {
+                        vehicle_images = result;
+                    })
+                if (vehicle_images) {
+                    vehicle["vehicle_images"] = vehicle_images
+                }
                 if (vehicle) {
                     vehiclePartner["vehicle"] = vehicle;
                     vehiclePartner["partner"] = partner;
