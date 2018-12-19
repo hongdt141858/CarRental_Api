@@ -33,6 +33,7 @@ createConnections().catch((e) => console.log(e)).then((e) => {
     const fuelRoute = require('./router/FuelRouter')
     const vehiclePartnerRouter = require('./router/VehiclePartnerRouter')
     const bookingRouter = require('./router/BookingRouter')
+    const userRouter = require('./router/UserRouter')
 
     app.use("/city", cityRoute )
     app.use("/brand", brandRoute )
@@ -41,6 +42,7 @@ createConnections().catch((e) => console.log(e)).then((e) => {
     app.use("/fuel", fuelRoute )
     app.use("/vehicle-partner", vehiclePartnerRouter )
     app.use("/booking", bookingRouter )
+    app.use("/user", userRouter)
 
     app.listen(app.get("port"), () => {
         console.log(("  App is running at http://localhost:%d in %s mode"), app.get("port"), app.get("env"));

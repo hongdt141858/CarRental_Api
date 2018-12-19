@@ -1,15 +1,9 @@
-import {Index,Entity, PrimaryColumn, Column, OneToOne, OneToMany, ManyToOne, ManyToMany, JoinColumn, JoinTable, RelationId} from "typeorm";
+import {Index,Entity, PrimaryColumn, Column, OneToOne, OneToMany, ManyToOne,PrimaryGeneratedColumn, ManyToMany, JoinColumn, JoinTable, RelationId} from "typeorm";
 
 
 @Entity("user_account",{schema:"car_rental"})
 export class user_account {
-
-    @Column("int",{ 
-        generated:true,
-        nullable:false,
-        primary:true,
-        name:"user_account_id"
-        })
+    @PrimaryGeneratedColumn()
     user_account_id:number;
         
 
