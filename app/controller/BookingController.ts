@@ -76,6 +76,7 @@ export default class BookingController {
         if (bookReq.vehicle_partner_id <= 0 && bookReq.vehicle_partner_name === "") MyUtil.handleError({ message: "Vehicle info is wrong!" }, res);
 
         // console.log(bookReq)
+        
         await this.bookingService.create(bookReq)
             .then(result => MyUtil.handleSuccess(result, res))
             .catch(err => MyUtil.handleError(err, res))

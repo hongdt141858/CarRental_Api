@@ -15,6 +15,7 @@ export default class VehicleRepository  implements IVehicleRepository {
 
     public async getOne(id: number): Promise<Vehicle> {
         return await this.vehicleRepo.findOne({"vehicle_id": id});
+        
     }
 
     public async create(vehicle: Vehicle): Promise<Vehicle> {
