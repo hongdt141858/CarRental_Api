@@ -35,6 +35,7 @@ export default class UserAccountService implements IUserAccountService {
     }
 
     public async register(user: UserAccount): Promise<UserAccount> {
+        console.log("//////////////", user)
         if (!user) throw new Error("User is not null!")
         if (user.user_account_name) {
             if (!Utils.checkUsername(user.user_account_name)) throw new Error("Username is not true format")
@@ -80,8 +81,8 @@ export default class UserAccountService implements IUserAccountService {
         console.log(result);
         if (!result) throw new Error("Error creating a new user")
 
-        result.user_acc_tokn = MyUtil.getToken(result);
-        await this.userRepo.update(result.user_acc_id, result)
+        result.user_account_token = MyUtil.getToken(result);
+        await this.userRepo.update(result.user_account_id, result)
             .then(data => result = data)
             .catch(err => { throw new Error(err) })
 
